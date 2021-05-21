@@ -10,11 +10,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
+/**
+ * Class used for handling JSON Information
+ */
 public class JSONHandler {
 
     private JSONArray ja = null;
     private JSONObject jo = null;
 
+    /**
+     * Constructor
+     */
     public JSONHandler() {
         this.jo = new JSONObject();
         this.ja = new JSONArray();

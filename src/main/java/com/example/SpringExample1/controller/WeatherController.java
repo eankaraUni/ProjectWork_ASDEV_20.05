@@ -1,25 +1,30 @@
 package com.example.SpringExample1.controller;
-
-
 import com.example.SpringExample1.model.City;
 import com.example.SpringExample1.model.CurrentCityWeather;
 import com.example.SpringExample1.model.JSONHandler;
-
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This is the controller class for displaying depending the method
+ * the Cities or the the Weather of the selected City and the Forecast of the selected City
+ * @author Erda Ymeri ASDEV
+ */
 @RestController
 public class WeatherController {
-    private CurrentCityWeather ccw;
 
+    private CurrentCityWeather ccw;
+    /**
+     * Here are added to a list our selected Cities, so that the
+     * user can choose one of the them
+     * @return the List of the Cities
+     */
     @GetMapping("/method1")
     public List<City> displayCity() {
         List<City> cities = new ArrayList<>();
@@ -36,6 +41,11 @@ public class WeatherController {
         return cities;
     }
 
+    /**
+     * In this method the user by giving the wanted City can get the Weather of that City
+     * @param name of the selected City
+     * @return the current Weather of that City
+     */
     @GetMapping("/method2")
     public CurrentCityWeather displayCurrentWeather(@RequestParam(name = "name") String name) {
 
@@ -62,6 +72,12 @@ public class WeatherController {
 
     }
 
+    /**
+     * In this method we get the Forecast of the City
+     * @param lat latitude of that City
+     * @param lon longitude of that City
+     * @return the 7 DAy Forecast of that City
+     */
     @GetMapping("/method3")
     public List<CurrentCityWeather> display7DaysForecast(@RequestParam(name = "lat") double lat, @RequestParam(name = "lon") double lon) {
         JSONHandler handler = new JSONHandler();

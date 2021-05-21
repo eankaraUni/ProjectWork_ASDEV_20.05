@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.SpringExample1"},{"l":"com.example.SpringExample1.controller"},{"l":"com.example.SpringExample1.model"}];updateSearchResults();
