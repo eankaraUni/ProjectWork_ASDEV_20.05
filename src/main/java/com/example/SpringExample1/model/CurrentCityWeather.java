@@ -47,6 +47,7 @@ public class CurrentCityWeather {
      * changes the value of the name of the City
      * @param name of the City
      */
+
     public void setName(String name) {
             this.name = name;
         }
