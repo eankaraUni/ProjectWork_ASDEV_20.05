@@ -1,6 +1,7 @@
 package com.example.SpringExample1.controller;
 import com.example.SpringExample1.model.City;
 import com.example.SpringExample1.model.CurrentCityWeather;
+import com.example.SpringExample1.model.HistoricalData;
 import com.example.SpringExample1.model.JSONHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -104,6 +106,55 @@ public class WeatherController {
         }
         return ccw;
     }
+
+    @GetMapping("/method4")
+    public HistoricalData displayPrevious1DaysTempPressureHumidity(@RequestParam(name = "lat") double lat, @RequestParam(name = "lon") double lon, @RequestParam(name = "time") long time) {
+        JSONHandler handler1 = new JSONHandler();
+        handler1.APIcall("https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=" + lat + "&lon=" + lon + "&dt=" + time + "&appid=1110ad18e853db5fdaab300d420615dc", true);
+        JSONArray stats1 = (JSONArray) handler1.getObject().get("hourly");
+        JSONObject obj1;
+        List<Double> temp = new ArrayList<>();
+        List<Long> pressure = new ArrayList<>();
+        List<Long> humidity = new ArrayList<>();
+        for (int i = 0; i < stats1.size(); i++) {
+            obj1 = (JSONObject) stats1.get(i);
+            temp.add((Double) obj1.get("temp"));
+            pressure.add((long) obj1.get("pressure"));
+            humidity.add((long) obj1.get("humidity"));
+        }
+        double minTemp = Collections.min(temp);
+        double maxTemp = Collections.max(temp);
+        double sumTemp = 0;
+        for (double i : temp) {
+            sumTemp += i;
+        }
+        double avgTemp = sumTemp / temp.size();
+        long minPressure = Collections.min(pressure);
+        long maxPressure = Collections.max(pressure);
+        long sumPressure = 0;
+        for (long j : pressure) {
+            sumPressure += j;
+        }
+        long avgPressure = sumPressure / pressure.size();
+        long minHumidity = Collections.min(humidity);
+        long maxHumidity = Collections.max(humidity);
+        long sumHumidity = 0;
+        for (long z : humidity) {
+            sumHumidity += z;
+        }
+        long avgHumidity = sumPressure / pressure.size();
+        long unixSeconds = time;
+// convert seconds to milliseconds
+        Date date = new java.util.Date(unixSeconds * 1000L);
+// the format of your date
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+// give a timezone reference for formatting (see comment at the bottom)
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
+        String formattedDate = sdf.format(date);
+        HistoricalData hwtph = new HistoricalData(minTemp,maxTemp,avgTemp,minPressure,maxPressure,avgPressure,minHumidity,maxHumidity,avgHumidity,formattedDate);
+        return hwtph;
+    }
+
 
 
 }
